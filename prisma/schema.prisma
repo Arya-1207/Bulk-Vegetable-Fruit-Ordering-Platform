@@ -10,10 +10,12 @@ generator client {
 }
 
 model Product {
-  id       Int      @id @default(autoincrement())
-  name     String
-  price    Float
-  orders   Order[]  @relation("ProductOrders") // Add this line for the inverse relation
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Float
+  image       String   @default("/api/placeholder/400/320")
+  description String   @default("Fresh produce directly from farms")
+  orders      Order[]  @relation("ProductOrders")
 }
 
 model Order {
@@ -23,9 +25,9 @@ model Order {
   deliveryName  String
   deliveryPhone String
   deliveryAddr  String
-  status        String  @default("Pending") // Pending, In Progress, Delivered
+  status        String   @default("Pending") // Pending, In Progress, Delivered
   createdAt     DateTime @default(now())
 
-  product       Product @relation("ProductOrders", fields: [productId], references: [id]) // Link this relation to ProductOrders
+  product       Product  @relation("ProductOrders", fields: [productId], references: [id])
 }
 
