@@ -1,29 +1,31 @@
-generator client {
-  provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
-}
+// prisma/schema.prisma
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 model Product {
-  id       Int     @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String
   price    Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  orders   Order[]  @relation("ProductOrders") // Add this line for the inverse relation
 }
 
 model Order {
-  id        Int      @id @default(autoincrement())
-  productName String
-  quantity   Int
-  status     String  @default("Pending")
-  buyerName  String
-  contact    String
-  address    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  productId     Int
+  quantity      Int
+  deliveryName  String
+  deliveryPhone String
+  deliveryAddr  String
+  status        String  @default("Pending") // Pending, In Progress, Delivered
+  createdAt     DateTime @default(now())
+
+  product       Product @relation("ProductOrders", fields: [productId], references: [id]) // Link this relation to ProductOrders
 }
+
