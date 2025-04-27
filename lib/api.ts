@@ -1,3 +1,4 @@
+// lib/api.ts
 // Handle both server-side rendering and client-side rendering
 const baseUrl = typeof window === 'undefined' 
   ? process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL 
@@ -7,9 +8,19 @@ const baseUrl = typeof window === 'undefined'
 
 export async function getProducts() {
   try {
-    const res = await fetch(`${baseUrl}/api/products`);
-    if (!res.ok) return [];
-    return await res.json();
+    const res = await fetch(`${baseUrl}/api/products`, {
+      // Add cache: 'no-store' to prevent caching for debugging
+      cache: 'no-store'
+    });
+    
+    if (!res.ok) {
+      console.error("Error response from products API:", res.status, res.statusText);
+      return [];
+    }
+    
+    const data = await res.json();
+    console.log("Products fetched:", data.length);
+    return data;
   } catch (error) {
     console.error("Error fetching products:", error);
     return [];
@@ -44,7 +55,9 @@ export async function trackOrder(id: number) {
 
 export async function getOrders() {
   try {
-    const res = await fetch(`${baseUrl}/api/admin/orders`);
+    const res = await fetch(`${baseUrl}/api/admin/orders`, {
+      cache: 'no-store'
+    });
     if (!res.ok) return [];
     return await res.json();
   } catch (error) {
