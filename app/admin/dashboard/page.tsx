@@ -7,9 +7,13 @@ export default async function AdminDashboard() {
     <div className="min-h-screen p-8">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {orders.map((order) => (
-          <OrderCard key={order.id} order={order} />
-        ))}
+        {orders && orders.length > 0 ? (
+          orders.map((order) => (
+            <OrderCard key={order.id} order={order} />
+          ))
+        ) : (
+          <p>No orders available</p>
+        )}
       </div>
     </div>
   );
