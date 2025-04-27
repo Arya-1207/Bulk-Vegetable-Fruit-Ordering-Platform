@@ -27,6 +27,9 @@
   "scripts": {
   "build": "next build",
   "postbuild": "prisma generate"
+  "seed": "ts-node prisma/seed.ts"
 }
+}
+
 
 }
